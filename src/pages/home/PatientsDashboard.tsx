@@ -27,6 +27,10 @@ export function PatientsDashboard({Dados}:PatientsDashboardProps) {
         EstadosPerc.map((EstadoPerc,index)=>{
             EstadosPerc[index] = Math.round(EstadoPerc * 100)
         }) 
+
+        if (EstadosPerc.includes(NaN)) {
+            EstadosPerc.fill(0)
+        }
     return(
         <Row className="rounded justify-content-center py-2 mb-3" style={{backgroundColor:"var(--tertiary)"}}>
             
