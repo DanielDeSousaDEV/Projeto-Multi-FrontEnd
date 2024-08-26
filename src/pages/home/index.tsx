@@ -5,7 +5,13 @@ import { api } from "../../api/config";
 import { patientRowProps, PatientRow } from "./PatientRow";
 import { PatientsDashboard } from "./PatientsDashboard";
 
+import { PatientInitialValues } from '../../utils/InitialValues/PatientInitialValues.js';
+import { PatientCreationModalT } from "../../components/modals/PatientCreationModalT/index.js";
+import { useFormik } from "formik";
+import { CreatePatient } from "../../utils/validation/CreatePatient.js";
+
 export function Home() {
+
     let [sucesso, setSucesso] = useState<boolean>()
 
     let [pacientes, setPacientes] = useState<patientRowProps[]>([])
@@ -36,6 +42,9 @@ export function Home() {
 
     const closePacienteModal = () => {setPacienteModal(false)}
     const openPacienteModal = () => {setPacienteModal(true)}
+
+
+    
     
     async function PegarTodosPacientes():Promise<void> {
         api.get('/pacientes').then((resp)=>{
@@ -218,7 +227,7 @@ export function Home() {
                 </Modal.Footer>
             </Modal>
             
-           
+            <PatientCreationModalT />
 
         </>
     )
