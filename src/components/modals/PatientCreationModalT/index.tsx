@@ -20,7 +20,9 @@ export function PatientCreationModalT ({...rest}:PatientCreationModalProps) {
         validationSchema: CreatePatient,
         onSubmit: (values) => {
             try{
-                api.post('/paciente', values)
+                api.post('/pacientes', values)
+
+                //tá dando erro porque o backend tá esperando os nomes em portugues
             }catch(error){
                 console.log(error)
             }
@@ -44,7 +46,7 @@ export function PatientCreationModalT ({...rest}:PatientCreationModalProps) {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <Form onSubmit={formik.handleSubmit} validated>
+                    <Form onSubmit={formik.handleSubmit}>
                         <Form.Group className="mb-3" controlId="NomeCompleto">
                             <Form.Label>Nome Completo</Form.Label>
                             <Form.Control required isInvalid={formik.touched.name && Boolean(formik.errors.name)} {...formik.getFieldProps('name')} placeholder="Digite seu nome" />
@@ -75,7 +77,13 @@ export function PatientCreationModalT ({...rest}:PatientCreationModalProps) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="Foto" >
                             <Form.Label>Foto do paciente</Form.Label>
-                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file" {...formik.getFieldProps('photo')} />
+                            <Form.Control  isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file"
+                                // onChange={(event) => {
+                                    
+                                //     const file = (event.currentTarget as HTMLInputElement).files?.[0]
+                                //     formik.setFieldValue('photo', file)
+                                // }}
+                            />
                             <Form.Control.Feedback type="invalid">{formik.errors.photo}</Form.Control.Feedback>
                         </Form.Group>
 

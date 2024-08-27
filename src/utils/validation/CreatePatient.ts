@@ -10,24 +10,29 @@ export const CreatePatient = Yup.object().shape({
     }).test('CPFValid', 'O CPF possui um valor invalido', (value)=>{
         return cpfValidator(value)
     }),
-    birthDate: Yup.date().required('O Data de Nascimeneto é obrigatória'),//validação de dia apos hoje
+    birthDate: Yup.date().required('O Data de Nascimeneto é obrigatória'), //validação de dia apos hoje
     telephone: Yup.string().required('O Telefone é obrigatório').test('InvalidFormat', 'O formato do Telefone é invalido', (value)=>{
         const telephoneRegExp = /[\(][\d]{2}[\)][\d]{5}[-][\d]{4}/
 
         return telephoneRegExp.test(value)
     }),
-    photo: Yup.mixed<File>().required('A Foto é obrigatório')
-    
-    // .test('FileType', 'O Arquivo não possui não possui um tipo valido', (value)=>{
-    //     const permittedExtensions = [
-    //         'image/png',
-    //         'image/jpg',
-    //         'image/jpeg'
-    //     ]
+    photo: Yup.mixed<File>().required('A Foto é obrigatório').test('FileType', 'O Arquivo não possui não possui um tipo valido', (value)=>{
+        const permittedExtensions = [
+            '.png',
+            '.jpg',
+            '.jpeg'
+        ]
 
-    //     return permittedExtensions.includes(value.type)
-    // }),
+        const FileName = value.name
 
+        //deve ter um metodo para isso
+
+        
+        const isValid = permittedExtensions.some((extension)=> FileName.endsWith(extension))
+
+        return isValid
+    }),
+  
     // .test('FileSize', 'A Imagem é muito grande', (value)=>{
     //     //não consegui testar essa validação
 
