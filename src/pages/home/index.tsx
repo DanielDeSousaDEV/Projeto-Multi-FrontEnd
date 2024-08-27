@@ -6,9 +6,9 @@ import { patientRowProps, PatientRow } from "./PatientRow";
 import { PatientsDashboard } from "./PatientsDashboard";
 
 import { PatientInitialValues } from '../../utils/InitialValues/PatientInitialValues.js';
-import { PatientCreationModalT } from "../../components/modals/PatientCreationModalT/index.js";
 import { useFormik } from "formik";
 import { CreatePatient } from "../../utils/validation/CreatePatient.js";
+import { PatientCreationModal } from "../../components/modals/PatientCreationModal/index.js";
 
 export function Home() {
 
@@ -90,6 +90,10 @@ export function Home() {
     function Recarregar() {
         location.reload()
     }
+
+    function debug() {
+        console.log('debug')
+    }
     
 
     return(
@@ -159,7 +163,7 @@ export function Home() {
             </Container>
 
 
-            <Modal show={pacienteModal} onHide={closePacienteModal} animation centered size="xl">
+            {/* <Modal show={pacienteModal} onHide={closePacienteModal} animation centered size="xl">
                 <Modal.Header closeButton>
                 <Modal.Title>Novo Paciente</Modal.Title>
                 </Modal.Header>
@@ -200,7 +204,7 @@ export function Home() {
 
                     </Form>
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
 
             
             <Modal show={errorModal} onHide={closeErrorModal}>
@@ -227,7 +231,7 @@ export function Home() {
                 </Modal.Footer>
             </Modal>
             
-            <PatientCreationModalT />
+            <PatientCreationModal animation centered size="xl" show={pacienteModal} handleClose={closePacienteModal} />
 
         </>
     )
