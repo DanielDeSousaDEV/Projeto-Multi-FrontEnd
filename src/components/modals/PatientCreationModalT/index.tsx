@@ -5,6 +5,7 @@ import { PatientInitialValues } from "../../../utils/InitialValues/PatientInitia
 import { CreatePatient } from "../../../utils/validation/CreatePatient";
 import { useState } from "react";
 import { api } from "../../../api/config";
+import { cpfValidator } from "../../../utils/functions/cpfValidator";
 
 type PatientCreationModalProps = {
     // onSubmitForm: (e:React.FormEvent<HTMLFormElement>)=>void
@@ -27,57 +28,65 @@ export function PatientCreationModalT ({...rest}:PatientCreationModalProps) {
       });      
       
       function debug() {
-        console.log(formik.getFieldProps('telephone'))
+        console.log(formik.errors)
         console.log(formik.values)
         //o erro vai mas não aparece
+        console.log(cpfValidator('622.630.883-42'))
       }
 
 
 
     return(
         <>
-            <h5>novo paciente</h5>
-            <Form onSubmit={formik.handleSubmit} validated>
-                <Form.Group className="mb-3" controlId="novoPacienteForm.NomeCompleto">
-                    <Form.Label>Nome Completo</Form.Label>
-                    <Form.Control required isValid={formik.touched.name && Boolean(formik.errors.name)} {...formik.getFieldProps('name')} placeholder="Digite seu nome" />
-                    <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
-                </Form.Group>
-                <Row>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="novoPacienteForm.DataNasc">
-                            <Form.Label>Data de nascimento</Form.Label>
-                            <Form.Control required isValid={formik.touched.birthDate && Boolean(formik.errors.birthDate)} {...formik.getFieldProps('birthDate')} type="date" max="9999-12-31" />
-                            <Form.Control.Feedback type="invalid">{formik.errors.birthDate}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="novoPacienteForm.CPF">
-                            <Form.Label>CPF</Form.Label>
-                            {/* <Form.Control required as={InputMask} name="cpf" mask="nnn.nnn.nnn-nn" replacement={{n:/[0-9]/}} type="text" placeholder="xxx.xxx.xxx-xx"/> */}
-                            <Form.Control required isValid={formik.touched.cpf && Boolean(formik.errors.cpf)} {...formik.getFieldProps('cpf')} as={InputMask} mask="nnn.nnn.nnn-nn" replacement={{n:/[0-9]/}} type="text" placeholder="xxx.xxx.xxx-xx" />
-                            <Form.Control.Feedback type="invalid">{formik.errors.cpf}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <Form.Group className="mb-3" controlId="telephone">
-                    <Form.Label>Número de telefone</Form.Label>
-                    {/* <Form.Control required as={InputMask} name="telephone" mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} type="text" placeholder="(xx) xxxxx-xxxx"/> */}
-                    <Form.Control required isInvalid={formik.touched.telephone && Boolean(formik.errors.telephone)} {...formik.getFieldProps('telephone')} as={InputMask} mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} placeholder="(xx) xxxxx-xxxx"/>
-                    <Form.Control.Feedback type="invalid">{formik.errors.telephone}</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="novoPacienteForm.Foto" >
-                    <Form.Label>Foto do paciente</Form.Label>
-                    <Form.Control required isValid={formik.touched.photo && Boolean(formik.errors.photo)} type="file" {...formik.getFieldProps('photo')} />
-                    <Form.Control.Feedback type="invalid">{formik.errors.photo}</Form.Control.Feedback>
-                </Form.Group>
+            <Modal show={true} animation centered size="xl">
+                <Modal.Header closeButton>
+                <Modal.Title>Novo Paciente</Modal.Title>
+                </Modal.Header>
 
-                <div className="justify-content-end d-flex gap-3">
-                    <Button variant="secondary" onClick={debug}>Cancelar</Button>
-                    <Button variant="primary" type="submit">Salvar novo paciente</Button>
-                </div>
+                <Modal.Body>
+                    <Form onSubmit={formik.handleSubmit} validated>
+                        <Form.Group className="mb-3" controlId="NomeCompleto">
+                            <Form.Label>Nome Completo</Form.Label>
+                            <Form.Control required isInvalid={formik.touched.name && Boolean(formik.errors.name)} {...formik.getFieldProps('name')} placeholder="Digite seu nome" />
+                            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
+                        </Form.Group>
+                        <Row>
+                            <Col>
+                                <Form.Group className="mb-3" controlId="DataNasc">
+                                    <Form.Label>Data de nascimento</Form.Label>
+                                    <Form.Control required isInvalid={formik.touched.birthDate && Boolean(formik.errors.birthDate)} {...formik.getFieldProps('birthDate')} type="date" max="9999-12-31" />
+                                    <Form.Control.Feedback type="invalid">{formik.errors.birthDate}</Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="mb-3" controlId="cpf">
+                                    <Form.Label>CPF</Form.Label>
+                                    {/* <Form.Control required as={InputMask} name="cpf" mask="nnn.nnn.nnn-nn" replacement={{n:/[0-9]/}} type="text" placeholder="xxx.xxx.xxx-xx"/> */}
+                                    <Form.Control required isInvalid={formik.touched.cpf && Boolean(formik.errors.cpf)} {...formik.getFieldProps('cpf')} as={InputMask} mask="nnn.nnn.nnn-nn" replacement={{n:/[0-9]/}} placeholder="xxx.xxx.xxx-xx" />
+                                    <Form.Control.Feedback type="invalid">{formik.errors.cpf}</Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Form.Group className="mb-3" controlId="telephone">
+                            <Form.Label>Número de telefone</Form.Label>
+                            {/* <Form.Control required as={InputMask} name="telephone" mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} type="text" placeholder="(xx) xxxxx-xxxx"/> */}
+                            <Form.Control required isInvalid={formik.touched.telephone && Boolean(formik.errors.telephone)} {...formik.getFieldProps('telephone')} as={InputMask} mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} placeholder="(xx)xxxxx-xxxx"/>
+                            <Form.Control.Feedback type="invalid">{formik.errors.telephone}</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="Foto" >
+                            <Form.Label>Foto do paciente</Form.Label>
+                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file" {...formik.getFieldProps('photo')} />
+                            <Form.Control.Feedback type="invalid">{formik.errors.photo}</Form.Control.Feedback>
+                        </Form.Group>
 
-            </Form>
+                        <div className="justify-content-end d-flex gap-3">
+                            <Button variant="secondary" onClick={debug}>Cancelar</Button>
+                            <Button variant="primary" type="submit">Salvar novo paciente</Button>
+                        </div>
+
+                    </Form>
+                </Modal.Body>
+            </Modal>
         </>
     )
 }
