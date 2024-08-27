@@ -29,6 +29,7 @@ export const CreatePatient = Yup.object().shape({
 
         
         const isValid = permittedExtensions.some((extension)=> FileName.endsWith(extension))
+        console.log(isValid)
 
         return isValid
     }),

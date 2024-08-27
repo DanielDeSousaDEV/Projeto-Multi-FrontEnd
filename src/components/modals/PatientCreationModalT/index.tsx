@@ -36,8 +36,6 @@ export function PatientCreationModalT ({...rest}:PatientCreationModalProps) {
         console.log(cpfValidator('622.630.883-42'))
       }
 
-
-
     return(
         <>
             <Modal show={true} animation centered size="xl">
@@ -77,12 +75,12 @@ export function PatientCreationModalT ({...rest}:PatientCreationModalProps) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="Foto" >
                             <Form.Label>Foto do paciente</Form.Label>
-                            <Form.Control  isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file"
-                                // onChange={(event) => {
-                                    
-                                //     const file = (event.currentTarget as HTMLInputElement).files?.[0]
-                                //     formik.setFieldValue('photo', file)
-                                // }}
+                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file"
+                                onChange={(event) => {
+                                    const file = (event.currentTarget as HTMLInputElement).files?.[0]
+                                    formik.setFieldValue('photo', file)
+                                }}
+                                // não aparece da maneira que eu queria talvez pelo getInputsFields 
                             />
                             <Form.Control.Feedback type="invalid">{formik.errors.photo}</Form.Control.Feedback>
                         </Form.Group>
