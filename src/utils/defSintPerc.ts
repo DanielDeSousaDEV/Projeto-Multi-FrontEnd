@@ -1,12 +1,12 @@
 import { sintomasOpts } from "../data/sintomasOpts";
 
-export function defSintPerc (Sintomas:Sintomas):number {
+export function defSintPerc (Sintomas:string[]):number {
     
-    let qtdSintomas = Sintomas.sintomas.length;
+    let qtdSintomas = Sintomas.length;
 
     let consultaPerc = 0
 
-    if (!(Sintomas.sintomas[0] === 'Nenhum Sintoma Informado')) {
+    if (!(Sintomas[0] === 'Nenhum Sintoma Informado')) {
 
         consultaPerc = Math.round((qtdSintomas / sintomasOpts.length) * 100);
 

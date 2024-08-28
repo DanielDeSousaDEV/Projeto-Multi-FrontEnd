@@ -26,7 +26,7 @@ export function Perfil () {
 
     let [consultas, setConsultas] = useState<ConsultItemProp[]>([])
 
-    let [paciente, setPaciente] = useState<Patient>()
+    let [paciente, setPaciente] = useState<Patient>({} as Patient)
 
     let [ultEstConsulta, setUltEstConsulta] = useState<string>('')
 
@@ -59,6 +59,18 @@ export function Perfil () {
         validationSchema: consultRegistration,
         onSubmit: ()=>{
 
+            const symptomsPercperception = defSintPerc(formik.values.symptoms)
+            
+            const consultCondition = defEstado(symptomsPercperception)//tenho que trocar o nome das funções
+
+            const consultData = {
+                ...formik.values,
+                paciente_id: paciente.id
+            }
+
+            api.post('/consultas/', consultData)
+            //ainda tenho que levar os sintomas como string e o estado
+            //a definicao de sintomas esta errada
         }
     })
 
@@ -202,7 +214,7 @@ export function Perfil () {
 
                     <Row className="p-3 rounded mb-3" style={{backgroundColor:"var(--quaternary)"}}>
                         <h3>Realizar Consulta</h3>
-                        <Form className="mb-3" onSubmit={AdicionarNovaConsulta}>
+                        <Form className="mb-3" onSubmit={formik.handleSubmit}>
                             <Row className="gap-3 mb-3">
                                 <Col>
                                     <Form.Group controlId="heartRate">
@@ -221,15 +233,10 @@ export function Perfil () {
                             </Row>
                             <Row>
                                 <p onClick={debug}>Sintomas</p>
-                                {/* <Form.Group>
-                                    <FormCheck isInvalid={Boolean(formik.errors.t) && formik.touched.t} {...formik.getFieldProps('t')}/>
-                                    <Form.Control.Feedback type="invalid">{formik.errors.t}</Form.Control.Feedback>
-                                </Form.Group> */}
-                                {/* tenho que ver como vou fazer isso */}
                                 <div>
                                     {sintomasOpts.map((sintoma,index)=>(
                                         <Col key={`${sintoma}${index}`}>
-                                            <FormCheck type="checkbox"  name={'sintomas'} id={`${index}`} key={`${index}`} label={`${sintoma}`} {...formik.getFieldProps('symptoms')} value={`${sintoma}`}/>
+                                            <FormCheck type="checkbox" id={`${index}`} key={`${index}`} label={`${sintoma}`} {...formik.getFieldProps('symptoms')} value={`${sintoma}`}/>
                                         </Col>
                                     ))}
                                 </div>
