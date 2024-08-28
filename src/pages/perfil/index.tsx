@@ -1,18 +1,32 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Accordion, Alert, Badge, Button, Col, Container, Form, FormCheck, Image, Modal, Row, Stack } from "react-bootstrap";
-import { useParams } from "react-router-dom"
+import { Accordion, Alert, Badge, Button, Col, Container, Form, FormCheck, Image, InputGroup, Modal, Row, Stack } from "react-bootstrap";
+import { useLocation, useParams } from "react-router-dom"
 import { api } from "../../api/config";
 import { ConsultItem, ConsultItemProp } from "./ConsultItem";
 import { sintomasOpts } from "../../data/sintomasOpts"
 import { defSintPerc } from "../../utils/defSintPerc";
 import { defEstado } from "../../utils/defEstado";
+import { Formik, useFormik } from "formik";
+import { ConsultInitialValues } from "@/utils/InitialValues/ConsultInitialValue";
+import { consultRegistration } from "@/utils/validation/consultRegistration";
 
 export function Perfil () {
+    let {state} = useLocation()
+    
+    useEffect(()=>{
+        setPaciente(state)
+
+        if (!state) {
+            PegarDadosPaciente()
+            // vale ressaltar que tavez o back end mande as consultas
+        }
+    }, [])
+
     let { id } = useParams();
 
     let [consultas, setConsultas] = useState<ConsultItemProp[]>([])
 
-    let [paciente, setPaciente] = useState<Paciente>()
+    let [paciente, setPaciente] = useState<Patient>()
 
     let [ultEstConsulta, setUltEstConsulta] = useState<string>('')
 
@@ -30,7 +44,7 @@ export function Perfil () {
     let closeLoadModal = () => {setLoadModal(false)}
 
     useEffect(()=>{PegarTodasConsultas()}, [id, sucesso])
-    useEffect(()=>{PegarDadosPaciente()}, [id])
+    // useEffect(()=>{PegarDadosPaciente()}, [id]) não sei se permaneço com isso
 
     useEffect(() => {
         setUltEstConsulta('Indefinido')
@@ -38,6 +52,15 @@ export function Perfil () {
             setUltEstConsulta(consultas[0].estado)
         }
     }, [consultas])
+
+
+    const formik = useFormik({
+        initialValues: ConsultInitialValues,
+        validationSchema: consultRegistration,
+        onSubmit: ()=>{
+
+        }
+    })
 
     async function PegarDadosPaciente():Promise<void> {
         try {
@@ -130,8 +153,14 @@ export function Perfil () {
         location.reload()
     }
 
-    let dataDeNascNFormat = new Date (paciente?.dataNasc!)
+    let dataDeNascNFormat = new Date (paciente?.birthDate!)
     let dataNascFormatada = dataDeNascNFormat.toLocaleDateString('pt-br')
+
+    // console.log(consultas)
+
+    function debug() {
+        console.log(formik.values)
+    }
     
     return (
         <>
@@ -140,14 +169,14 @@ export function Perfil () {
                     <Row className="p-3 rounded mb-3" style={{backgroundColor:"var(--quaternary)"}}>
                     <h2>Perfil</h2>
                         <Col id="image" className="d-flex justify-content-center" lg={4}>
-                            <Image src={paciente?.foto} loading="lazy" fluid draggable={false} thumbnail rounded alt="Foto Do Paciente"/>
+                            <Image src={paciente?.photo} loading="lazy" fluid draggable={false} thumbnail rounded alt="Foto Do Paciente"/>
                         </Col>
                         <Col id="dados" className="position-relative">
                             <Badge bg="secondary" className="position-absolute top-0 end-0">#ID:{id}</Badge>
                             <Stack gap={3} className="flex-column justify-content-around">
                                 <Col>
                                     <p><b>Nome Completo: </b></p>
-                                    <Row className="p-2 m-0 rounded" style={{backgroundColor:"var(--quinary)"}}>{paciente?.nome}</Row>
+                                    <Row className="p-2 m-0 rounded" style={{backgroundColor:"var(--quinary)"}}>{paciente?.name}</Row>
                                 </Col>
                                 <Row className="gap-2">
                                     <Col>
@@ -161,7 +190,7 @@ export function Perfil () {
                                 </Row>
                                 <Col>
                                     <p><b>Telefone: </b></p>
-                                    <Row className="p-2 m-0 rounded" style={{backgroundColor:"var(--quinary)"}}>{paciente?.telefone}</Row>
+                                    <Row className="p-2 m-0 rounded" style={{backgroundColor:"var(--quinary)"}}>{paciente?.telephone}</Row>
                                 </Col>
                                 <Col>
                                     <p><b>Estado da Ultima Consulta: </b></p>
@@ -176,24 +205,31 @@ export function Perfil () {
                         <Form className="mb-3" onSubmit={AdicionarNovaConsulta}>
                             <Row className="gap-3 mb-3">
                                 <Col>
-                                    <Form.Group controlId="novoConsultaForm.freqCard">
+                                    <Form.Group controlId="heartRate">
                                         <Form.Label>Frequencia Cardiaca</Form.Label>
-                                        <Form.Control min={1} step={0.01} required type="number" name="freqCard"/>
+                                        <Form.Control isInvalid={formik.touched.heartRate && Boolean(formik.errors.heartRate)} min={1} step={0.01} required {...formik.getFieldProps('heartRate')}/>
+                                        <Form.Control.Feedback type="invalid">{formik.errors.heartRate}</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Col>
-                                    <Form.Group controlId="novoConsultaForm.freqResp">
+                                    <Form.Group controlId="respiratoryRate">
                                         <Form.Label>Frequencia Respiratoria</Form.Label>
-                                        <Form.Control min={1} step={0.01} required type="number" name="freqResp"/>
+                                        <Form.Control isInvalid={formik.touched.respiratoryRate && Boolean(formik.errors.respiratoryRate)} min={1} step={0.01} required {...formik.getFieldProps('respiratoryRate')}/>
+                                        <Form.Control.Feedback type="invalid">{formik.errors.respiratoryRate}</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                             </Row>
                             <Row>
-                                <p>Sintomas</p>
+                                <p onClick={debug}>Sintomas</p>
+                                {/* <Form.Group>
+                                    <FormCheck isInvalid={Boolean(formik.errors.t) && formik.touched.t} {...formik.getFieldProps('t')}/>
+                                    <Form.Control.Feedback type="invalid">{formik.errors.t}</Form.Control.Feedback>
+                                </Form.Group> */}
+                                {/* tenho que ver como vou fazer isso */}
                                 <div>
                                     {sintomasOpts.map((sintoma,index)=>(
                                         <Col key={`${sintoma}${index}`}>
-                                            <FormCheck type="checkbox" value={`${sintoma}`} name={'sintomas'} id={`${index}`} key={`${index}`} label={`${sintoma}`}/>
+                                            <FormCheck type="checkbox"  name={'sintomas'} id={`${index}`} key={`${index}`} label={`${sintoma}`} {...formik.getFieldProps('symptoms')} value={`${sintoma}`}/>
                                         </Col>
                                     ))}
                                 </div>

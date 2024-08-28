@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { cpfValidator } from '../functions/cpfValidator'
+import { cpfValidator } from '@/utils/functions/cpfValidator'
 
 export const CreatePatient = Yup.object().shape({
     name: Yup.string().required('O Nome é obrigatório'),
@@ -25,22 +25,15 @@ export const CreatePatient = Yup.object().shape({
 
         const FileName = value.name
 
-        //deve ter um metodo para isso
-
-        
         const isValid = permittedExtensions.some((extension)=> FileName.endsWith(extension))
         console.log(isValid)
 
         return isValid
-    }),
-  
-    // .test('FileSize', 'A Imagem é muito grande', (value)=>{
-    //     //não consegui testar essa validação
+    }).test('FileSize', 'A Imagem é muito grande', (value)=>{
+        const maxSize = 3 * 1024 * 1024 
 
-    //     const maxSize = 3 * 1024 * 1024 
-
-    //     console.log(value.size);
+        console.log(value.size);
         
-    //     return value.size <= maxSize
-    // })
+        return value.size <= maxSize
+    })
 })

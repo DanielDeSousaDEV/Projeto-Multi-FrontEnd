@@ -1,6 +1,7 @@
 import { FaArrowCircleRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { defCorEstado } from "../../utils/defCorEstado";
+import { Link, useLocation } from "react-router-dom";
+
+import { defCorEstado } from "@utils/defCorEstado";
 
 export interface patientRowProps {
     id:number,
@@ -10,25 +11,30 @@ export interface patientRowProps {
     dataNasc:number
 }
 
-export function PatientRow(paciente:patientRowProps) {
+export function PatientRow(paciente:Patient) {
 
-    let dataNascimento = new Date(paciente.dataNasc)
+    let dataNascimento = new Date(paciente.birthDate)
     
     let dataAtual = new Date();
 
     let idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
+
     
-    let corEstado = defCorEstado(paciente.condicao)
+    
+    
+    // let corEstado = defCorEstado(paciente.condicao)
+
+    //concertar as cores dos estados dps
     
     return(
         <tr>
             <td>{paciente.id}</td>
-            <td>{paciente.nome}</td>
-            <td style={{color:corEstado}}>{paciente.condicao}</td>
+            <td>{paciente.name}</td>
+            <td >{paciente.condition}</td> {/*style={{color:corEstado}}*/}
             <td>{paciente.cpf}</td>
             <td>{idade}</td>
             <td>
-                <Link className="d-flex justify-content-center align-items-center h-full fluid" to={'/perfil/' + paciente.id}>
+                <Link className="d-flex justify-content-center align-items-center h-full fluid" to={'/perfil/' + paciente.id} state={paciente}>
                     <FaArrowCircleRight size={25}/>
                 </Link>
             </td>

@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Col, Container, Form, Modal, Row, Table } from "react-bootstrap";
-import { InputMask } from "@react-input/mask";
-import { api } from "../../api/config";
+import { Alert, Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
+import { api } from "@/api/config";
 import { patientRowProps, PatientRow } from "./PatientRow";
 import { PatientsDashboard } from "./PatientsDashboard";
 
-import { PatientInitialValues } from '../../utils/InitialValues/PatientInitialValues.js';
-import { useFormik } from "formik";
-import { CreatePatient } from "../../utils/validation/CreatePatient.js";
-import { PatientCreationModal } from "../../components/modals/PatientCreationModal/index.js";
+import { PatientCreationModal } from "@components/modals/PatientCreationModal/index.js";
 
 export function Home() {
 
     let [sucesso, setSucesso] = useState<boolean>()
 
-    let [pacientes, setPacientes] = useState<patientRowProps[]>([])
+    let [pacientes, setPacientes] = useState<Patient[]>([])
 
     useEffect(()=>{PegarTodosPacientes()},[sucesso])
 
@@ -58,34 +54,34 @@ export function Home() {
         })
     }
 
-    async function AdicionarNovoPaciente (e:React.FormEvent<HTMLFormElement>) {
-        e.preventDefault()
+    // async function AdicionarNovoPaciente (e:React.FormEvent<HTMLFormElement>) {
+    //     e.preventDefault()
 
-        setSucesso(false)
+    //     setSucesso(false)
         
-        closeErrorAlert()
+    //     closeErrorAlert()
         
-        let myForm = e.currentTarget
+    //     let myForm = e.currentTarget
         
-        let myformdata = new FormData(myForm)
+    //     let myformdata = new FormData(myForm)
         
-        myformdata.append('condicao','Indefinido')
+    //     myformdata.append('condicao','Indefinido')
         
-        await api.post('/pacientes',myformdata).then(()=>{
-            setSucesso(true)
-        }).catch((erros)=>{
-            setError(false)
-            if(erros.response?.status === 422){
-                console.error(erros)
-                setError(erros.response.data.errors)
-                openErrorAlert()
-                return
-            }
-            setError(erros.message)
-            openErrorModal()
-        })
-        closePacienteModal()
-    }
+    //     await api.post('/pacientes',myformdata).then(()=>{
+    //         setSucesso(true)
+    //     }).catch((erros)=>{
+    //         setError(false)
+    //         if(erros.response?.status === 422){
+    //             console.error(erros)
+    //             setError(erros.response.data.errors)
+    //             openErrorAlert()
+    //             return
+    //         }
+    //         setError(erros.message)
+    //         openErrorModal()
+    //     })
+    //     closePacienteModal()
+    // }
 
     function Recarregar() {
         location.reload()
@@ -107,7 +103,7 @@ export function Home() {
                             <Button className="py-2" onClick={openPacienteModal}>Adicionar novo paciente</Button>
                         </Row>
 
-                        <PatientsDashboard Dados={pacientes}/>
+                        {/* <PatientsDashboard Dados={pacientes}/> */}
 
                         {errorAlert && (
                             <Alert variant="warning" onClose={closeErrorAlert} dismissible>
@@ -148,7 +144,19 @@ export function Home() {
                                 </thead>
                                 <tbody>
                                     {pacientes.map((paciente)=>(
-                                        <PatientRow key={paciente.id} id={paciente.id} nome={paciente.nome} condicao={paciente.condicao} cpf={paciente.cpf} dataNasc={paciente.dataNasc} />
+                                        // não aparece porque tá em ingles
+                                        <PatientRow 
+                                            key={paciente.id} 
+                                            id={paciente.id} 
+                                            name={paciente.name} 
+                                            condition={paciente.condition} 
+                                            cpf={paciente.cpf} 
+                                            birthDate={paciente.birthDate} 
+                                            photo={paciente.photo}
+                                            telephone={paciente.telephone}
+                                            created_at={paciente.created_at} 
+                                            updated_at={paciente.updated_at}
+                                        />
                                     ))}
                                 </tbody>
                             </Table>    
