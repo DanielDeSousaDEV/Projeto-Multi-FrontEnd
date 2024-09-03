@@ -12,7 +12,7 @@ export const CreatePatient = Yup.object().shape({
     }),
     birthDate: Yup.date().required('O Data de Nascimeneto é obrigatória'), //validação de dia apos hoje
     telephone: Yup.string().required('O Telefone é obrigatório').test('InvalidFormat', 'O formato do Telefone é invalido', (value)=>{
-        const telephoneRegExp = /[\(][\d]{2}[\)][\d]{5}[-][\d]{4}/
+        const telephoneRegExp = /[\(][\d]{2}[\)][\d]{4}[-][\d]{4}/
 
         return telephoneRegExp.test(value)
     }),

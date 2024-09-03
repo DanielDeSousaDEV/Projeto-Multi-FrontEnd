@@ -23,7 +23,7 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
                 
                 console.log(patientData)
                 
-                api.post('/pacientes', patientData)
+                api.post('/patients', patientData)
 
                 handleClose()
                 
@@ -74,15 +74,17 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
                         <Form.Group className="mb-3" controlId="telephone">
                             <Form.Label>Número de telefone</Form.Label>
                             {/* <Form.Control required as={InputMask} name="telephone" mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} type="text" placeholder="(xx) xxxxx-xxxx"/> */}
-                            <Form.Control required isInvalid={formik.touched.telephone && Boolean(formik.errors.telephone)} {...formik.getFieldProps('telephone')} as={InputMask} mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} placeholder="(xx)xxxxx-xxxx"/>
+                            <Form.Control required isInvalid={formik.touched.telephone && Boolean(formik.errors.telephone)} {...formik.getFieldProps('telephone')} as={InputMask} mask="(nn)nnnn-nnnn" replacement={{n:/[0-9]/}} placeholder="(xx)xxxxx-xxxx"/>
                             <Form.Control.Feedback type="invalid">{formik.errors.telephone}</Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="photo">
                             <Form.Label>Foto do paciente</Form.Label>
-                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file"
+                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} name="photo" type="file"
                                 onChange={(event) => {
                                     const file = (event.currentTarget as HTMLInputElement).files?.[0]
                                     formik.setFieldValue('photo', file)
+                                    console.log(file);
+                                    
                                 }}
                                 // não aparece da maneira que eu queria talvez pelo getInputsFields 
                             />

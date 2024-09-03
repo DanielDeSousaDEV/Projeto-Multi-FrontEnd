@@ -62,15 +62,17 @@ export function Perfil () {
             const symptomsPercperception = defSintPerc(formik.values.symptoms)
             
             const consultCondition = defEstado(symptomsPercperception)//tenho que trocar o nome das funções
-
+            
             const consultData = {
+                patient_id: paciente.id,
+                condition: consultCondition,
                 ...formik.values,
-                paciente_id: paciente.id
-            }
-
-            api.post('/consultas/', consultData)
+            }//talvez eu tenha que transformar o array em string
+            const a = formik.values.symptoms.toString()
+            
+            api.post(`/consultas`, consultData)
             //ainda tenho que levar os sintomas como string e o estado
-            //a definicao de sintomas esta errada
+            //a definicao de sintomas esta errada talvez não use mais
         }
     })
 
@@ -172,6 +174,8 @@ export function Perfil () {
 
     function debug() {
         console.log(formik.values)
+        console.log(formik.values.symptoms.toString())  
+
     }
     
     return (

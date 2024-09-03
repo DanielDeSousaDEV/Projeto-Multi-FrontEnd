@@ -43,7 +43,7 @@ export function Home() {
     
     
     async function PegarTodosPacientes():Promise<void> {
-        api.get('/pacientes').then((resp)=>{
+        api.get('/patients').then((resp)=>{
             setPacientes(resp.data)
             closeLoadModal()
         }).catch((error)=>{
@@ -89,6 +89,7 @@ export function Home() {
 
     function debug() {
         console.log('debug')
+        console.log(pacientes[0])
     }
     
 
@@ -132,7 +133,7 @@ export function Home() {
                     <Col md={7}>
                         {pacientes.length > 0 ? (
                             <Table striped bordered hover size='xxxl'>
-                                <thead>
+                                <thead onClick={debug}>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nome</th>

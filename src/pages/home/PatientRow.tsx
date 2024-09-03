@@ -5,15 +5,15 @@ import { defCorEstado } from "@utils/defCorEstado";
 
 export interface patientRowProps {
     id:number,
-    nome:string,
-    condicao:'Sintomas Insuficientes'|'Potencial Infectado'|'Possível Infectado'
+    name:string,
+    condition:'Sintomas Insuficientes'|'Potencial Infectado'|'Possível Infectado'
     cpf:string,
-    dataNasc:number
+    birthDate:number
 }
 
-export function PatientRow(paciente:Patient) {
+export function PatientRow(patient:Patient) {
 
-    let dataNascimento = new Date(paciente.birthDate)
+    let dataNascimento = new Date(patient.birthDate)
     
     let dataAtual = new Date();
 
@@ -21,20 +21,19 @@ export function PatientRow(paciente:Patient) {
 
     
     
-    
-    // let corEstado = defCorEstado(paciente.condicao)
+    // let corEstado = defCorEstado(patient.condicao)
 
     //concertar as cores dos estados dps
     
     return(
         <tr>
-            <td>{paciente.id}</td>
-            <td>{paciente.name}</td>
-            <td >{paciente.condition}</td> {/*style={{color:corEstado}}*/}
-            <td>{paciente.cpf}</td>
+            <td>{patient.id}</td>
+            <td>{patient.name}</td>
+            <td >{patient.condition}</td> {/*style={{color:corEstado}}*/}
+            <td>{patient.cpf}</td>
             <td>{idade}</td>
             <td>
-                <Link className="d-flex justify-content-center align-items-center h-full fluid" to={'/perfil/' + paciente.id} state={paciente}>
+                <Link className="d-flex justify-content-center align-items-center h-full fluid" to={'/perfil/' + patient.id} state={patient}>
                     <FaArrowCircleRight size={25}/>
                 </Link>
             </td>
