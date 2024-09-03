@@ -9,54 +9,43 @@ import { defCorFC } from "../../utils/defCorFC";
 import { defCorEstado } from "../../utils/defCorEstado";
 
 export interface ConsultItemProp {
-    id:number,
-    estado:'Sintomas Insuficientes'|'Potencial Infectado'|'Possível Infectado',
-    freqCard:number,
-    freqResp:number,
-    sintomas:string,
-    created_at:string,
-    eventKey:string
+    consult: Consult
 }
 
-export function ConsultItem (consulta:ConsultItemProp) {
+export function ConsultItem ({consult}:ConsultItemProp) {
 
-    //determinação do objeto sintomas
-    let sintomasJSON:Sintomas = JSON.parse(consulta.sintomas)
-
-    if (sintomasJSON.sintomas.length === 0) {
-        sintomasJSON = {
-            sintomas:[
-                "Nenhum Sintoma Informado"
-            ]
-        }
+    if (consult.symptoms === '') {
+        consult.symptoms = "Nenhum sintoma apresentado"
     }
+    
+    let symptomsArray = consult.symptoms.split(',')
 
     //Definição da porcentagem de possbilidade de infecção
-    let consultaPerc = defSintPerc(sintomasJSON);
+    let consultaPerc = defSintPerc(symptomsArray);
 
     //denifição da data da consulta
-    let dataConsulta = new Date(consulta.created_at).toLocaleDateString('pt-br')
+    let dataConsulta = new Date(consult.created_at).toLocaleDateString('pt-br')
 
     //Definição da cor do texto do estado
-    let corEstado = defCorEstado(consulta.estado);
+    let corEstado = defCorEstado(consult.condition);
 
     //definição do estado da frequencia cardiaca
-    let estadoFC = defFreqCard(consulta.freqCard)
+    let estadoFC = defFreqCard(consult.heartRate)
 
     //definição da cor do texto da frequencia cardiaca
     let corFreqCard = defCorFC(estadoFC)
 
     //definição do estado da frequencia repiratoria
-    let estadoFR = defFreqResp(consulta.freqResp)
+    let estadoFR = defFreqResp(consult.respiratoryRate)
 
     //definição da cor do texto da frequencia repiratoria
     let corFreqResp = defCorFR(estadoFR)
     
     return(
-        <Accordion.Item eventKey={consulta.eventKey}>
+        <Accordion.Item eventKey={consult.id.toString()}>
             <Accordion.Header>
                 <div className="container-fluid d-flex justify-content-between">
-                    <strong>Diagnostico: <span style={{color:corEstado}}>{consulta.estado}</span></strong>
+                    <strong>Diagnostico: <span style={{color:corEstado}}>{consult.condition}</span></strong> 
                     <strong>Data da Consulta: {dataConsulta}</strong>
                 </div>
             </Accordion.Header>
@@ -65,25 +54,25 @@ export function ConsultItem (consulta:ConsultItemProp) {
                     <h5>Relatorio do diagnostico</h5>
                     <strong>O paciente apresentou os seguintes sintomas: </strong>
                     <div className="d-flex flex-wrap gap-3">
-                        {sintomasJSON.sintomas.map((sintoma,index)=>(
-                            <div key={index} className="p-2 rounded" style={{backgroundColor:"var(--tertiary)"}}>{sintoma}</div>
+                        {symptomsArray.map((symptom,index)=>(
+                            <div key={index} className="p-2 rounded" style={{backgroundColor:"var(--tertiary)"}}>{symptom}</div>
                         ))}
                     </div>
                     <strong>E apresentou:</strong>
                     <Col>
-                        <strong>Frequencia Cardiaca:</strong><br/>{consulta.freqCard} bpm <span style={{color:corFreqCard}}>({estadoFC})</span>
+                        <strong>Frequencia Cardiaca:</strong><br/>{consult.heartRate} bpm <span style={{color:corFreqCard}}>({estadoFC})</span>
                     </Col>
                     <Col>
-                        <strong>Frequencia Respiratoria:</strong><br/>{consulta.freqResp} irpm <span style={{color:corFreqResp}}>({estadoFR})</span>
+                        <strong>Frequencia Respiratoria:</strong><br/>{consult.respiratoryRate} irpm <span style={{color:corFreqResp}}>({estadoFR})</span>
                     </Col>
                     <hr />
                     <strong>Diagnostico Final:</strong>
                     <Row>
                         <Col>
-                            <p style={{color:corEstado}}>{consulta.estado}</p>  
+                            <p style={{color:corEstado}}>{consult.condition}</p>
                         </Col>
                         <Col>
-                        <p>{consultaPerc}% dos sintomas</p>                                       
+                        <p>{consultaPerc}% dos sintomas</p>                              
                         </Col>
                     </Row>
                 </Stack>

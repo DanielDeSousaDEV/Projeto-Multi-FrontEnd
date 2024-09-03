@@ -79,14 +79,12 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="photo">
                             <Form.Label>Foto do paciente</Form.Label>
-                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} name="photo" type="file"
+                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file" name="photo"
                                 onChange={(event) => {
                                     const file = (event.currentTarget as HTMLInputElement).files?.[0]
                                     formik.setFieldValue('photo', file)
-                                    console.log(file);
-                                    
                                 }}
-                                // não aparece da maneira que eu queria talvez pelo getInputsFields 
+                                // não aparece da maneira que eu queria talvez pelo getInputFields 
                             />
                             <Form.Control.Feedback type="invalid">{formik.errors.photo}</Form.Control.Feedback>
                         </Form.Group>

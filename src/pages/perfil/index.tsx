@@ -1,12 +1,12 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Accordion, Alert, Badge, Button, Col, Container, Form, FormCheck, Image, InputGroup, Modal, Row, Stack } from "react-bootstrap";
+import { Accordion, Alert, Badge, Button, Col, Container, Form, FormCheck, Image, Modal, Row, Stack } from "react-bootstrap";
 import { useLocation, useParams } from "react-router-dom"
 import { api } from "../../api/config";
-import { ConsultItem, ConsultItemProp } from "./ConsultItem";
+import { ConsultItem } from "./ConsultItem";
 import { sintomasOpts } from "../../data/sintomasOpts"
 import { defSintPerc } from "../../utils/defSintPerc";
 import { defEstado } from "../../utils/defEstado";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { ConsultInitialValues } from "@/utils/InitialValues/ConsultInitialValue";
 import { consultRegistration } from "@/utils/validation/consultRegistration";
 
@@ -19,12 +19,14 @@ export function Perfil () {
         if (!state) {
             PegarDadosPaciente()
             // vale ressaltar que tavez o back end mande as consultas
+            console.log(state)
         }
+        console.log("nao possui os dados")
     }, [])
 
     let { id } = useParams();
 
-    let [consultas, setConsultas] = useState<ConsultItemProp[]>([])
+    let [consultas, setConsultas] = useState<Consult[]>([])
 
     let [paciente, setPaciente] = useState<Patient>({} as Patient)
 
@@ -49,7 +51,7 @@ export function Perfil () {
     useEffect(() => {
         setUltEstConsulta('Indefinido')
         if (consultas.length > 0) {
-            setUltEstConsulta(consultas[0].estado)
+            setUltEstConsulta(consultas[0].condition)
         }
     }, [consultas])
 
@@ -62,23 +64,27 @@ export function Perfil () {
             const symptomsPercperception = defSintPerc(formik.values.symptoms)
             
             const consultCondition = defEstado(symptomsPercperception)//tenho que trocar o nome das funções
+
+            const symptomsString = formik.values.symptoms.toString()
+
+            const {heartRate, respiratoryRate} = formik.values
             
             const consultData = {
                 patient_id: paciente.id,
                 condition: consultCondition,
-                ...formik.values,
-            }//talvez eu tenha que transformar o array em string
-            const a = formik.values.symptoms.toString()
+                symptoms: symptomsString,
+                heartRate: heartRate,
+                respiratoryRate: respiratoryRate
+            }
             
-            api.post(`/consultas`, consultData)
-            //ainda tenho que levar os sintomas como string e o estado
+            api.post(`/consults`, consultData) 
             //a definicao de sintomas esta errada talvez não use mais
         }
     })
 
     async function PegarDadosPaciente():Promise<void> {
         try {
-            await api.get(`/pacientes/${id}`).then((resp)=>{
+            await api.get(`/patients/${id}`).then((resp)=>{
                 setPaciente(resp.data)
                 closeLoadModal()
             }).catch((error)=>{
@@ -93,8 +99,9 @@ export function Perfil () {
     
     async function PegarTodasConsultas():Promise<void> {
         try {
-            await api.get(`/pacientes/${id}/consultas`).then((resp)=>{
+            await api.get(`/patients/${id}/consults`).then((resp)=>{
                 setConsultas(resp.data)
+                console.log(resp)
             }).catch((error)=>{
 
                 console.error(error);
@@ -110,43 +117,43 @@ export function Perfil () {
         }
     }
     
-    async function AdicionarNovaConsulta (e:FormEvent<HTMLFormElement>) {
-        e.preventDefault()
+    // async function AdicionarNovaConsulta (e:FormEvent<HTMLFormElement>) {
+    //     e.preventDefault()
 
-        setSucesso(false)
+    //     setSucesso(false)
         
-        let myForm = e.currentTarget
-        let myformdata = new FormData(myForm)
+    //     let myForm = e.currentTarget
+    //     let myformdata = new FormData(myForm)
         
-        //Definição do JSON dos sintomas
-        let sintomasInformados = myformdata.getAll('sintomas')
-        let sintomasJSON:{sintomas:string[]} = {
-            sintomas:[]
-        };
-        for (let index = 0; index < sintomasInformados.length; index++) {
-            sintomasJSON.sintomas.push(sintomasInformados[index].toString())            
-        }
+    //     //Definição do JSON dos sintomas
+    //     let sintomasInformados = myformdata.getAll('sintomas')
+    //     let sintomasJSON:{sintomas:string[]} = {
+    //         sintomas:[]
+    //     };
+    //     for (let index = 0; index < sintomasInformados.length; index++) {
+    //         sintomasJSON.sintomas.push(sintomasInformados[index].toString())            
+    //     }
         
-        myformdata.set('sintomas', JSON.stringify(sintomasJSON))
+    //     myformdata.set('sintomas', JSON.stringify(sintomasJSON))
         
-        //definição do usuario da consulta
-        myformdata.append('paciente_id',id!.toString())
+    //     //definição do usuario da consulta
+    //     myformdata.append('paciente_id',id!.toString())
         
-        let consultaPerc = defSintPerc(sintomasJSON)
+    //     let consultaPerc = defSintPerc(sintomasJSON)
         
-        let consultaEst = defEstado(consultaPerc)
+    //     let consultaEst = defEstado(consultaPerc)
         
-        myformdata.append('estado', consultaEst)
+    //     myformdata.append('estado', consultaEst)
         
-        await api.post('/consultas', myformdata).then(()=>{
-            setSucesso(true)
+    //     await api.post('/consultas', myformdata).then(()=>{
+    //         setSucesso(true)
 
-            AtualizarCondicao(consultaEst)
-        }).catch((error)=>{
-            setError(error.message)
-            openErroModal()
-        })
-    }
+    //         AtualizarCondicao(consultaEst)
+    //     }).catch((error)=>{
+    //         setError(error.message)
+    //         openErroModal()
+    //     })
+    // }
 
     async function AtualizarCondicao(condicao:string) {
         //fazer o json
@@ -173,8 +180,7 @@ export function Perfil () {
     // console.log(consultas)
 
     function debug() {
-        console.log(formik.values)
-        console.log(formik.values.symptoms.toString())  
+        console.log(consultas)  
 
     }
     
@@ -263,8 +269,8 @@ export function Perfil () {
                         <div className="d-flex flex-column justify-content-around">
                             {consultas.length > 0 ? (
                                 <Accordion>
-                                    {consultas.map((consulta,index)=>(
-                                        <ConsultItem key={consulta.id} eventKey={consulta.id.toString()} id={index} estado={consulta.estado} freqCard={consulta.freqCard} freqResp={consulta.freqResp} created_at={consulta.created_at} sintomas={consulta.sintomas}/>
+                                    {consultas.map((consulta)=>(
+                                        <ConsultItem key={consulta.id} consult={consulta}/>
                                     ))}
                                 </Accordion>
                             ):(
@@ -301,6 +307,7 @@ export function Perfil () {
                 </Modal.Footer>
             </Modal>
 
+            <Button onClick={debug}>aa</Button>
         </>
     )
 }
