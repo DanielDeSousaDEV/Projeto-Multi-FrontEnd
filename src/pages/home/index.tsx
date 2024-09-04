@@ -133,7 +133,7 @@ export function Home() {
                     <Col md={7}>
                         {pacientes.length > 0 ? (
                             <Table striped bordered hover size='xxxl'>
-                                <thead onClick={debug}>
+                                <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nome</th>

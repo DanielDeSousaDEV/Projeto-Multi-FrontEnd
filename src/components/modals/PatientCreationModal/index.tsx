@@ -105,7 +105,6 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
                     </Form>
                 </Modal.Body>
             </Modal>
-            <Button onClick={debug}>aa</Button>
         </>
     )
 }

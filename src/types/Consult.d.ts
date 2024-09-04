@@ -4,6 +4,6 @@ declare type Consult = {
     heartRate:number,
     respiratoryRate:number,
     patient_id:number,
-    symptoms:string,
+    symptoms:string|null,
     created_at:string,
 }

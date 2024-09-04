@@ -19,8 +19,12 @@ export function ConsultItem ({consult}:ConsultItemProp) {
     }
 
     // let symptomsArrayString = consult.symptoms.slice(2, consult.symptoms.length - 2)
-    
-    let symptomsArray = consult.symptoms.split(',')
+
+    let symptomsArray = ["Nenhum Sintoma Apresentado"]
+
+    if (consult.symptoms) {
+        symptomsArray = consult.symptoms.split(',')
+    }
 
     //Definição da porcentagem de possbilidade de infecção
     let consultaPerc = defSintPerc(symptomsArray);

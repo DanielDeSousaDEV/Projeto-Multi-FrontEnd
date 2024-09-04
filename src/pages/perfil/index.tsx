@@ -69,8 +69,13 @@ export function Perfil () {
             const symptomsPercperception = defSintPerc(formik.values.symptoms)
             
             const consultCondition = defEstado(symptomsPercperception)//tenho que trocar o nome das funções
+            
+            let symptomsString = ''
 
-            const symptomsString = formik.values.symptoms.toString()
+            if (formik.values.symptoms.toString()) {
+                symptomsString = formik.values.symptoms.toString()
+                console.log('a')
+            }
 
             const {heartRate, respiratoryRate} = formik.values
             
@@ -253,21 +258,21 @@ export function Perfil () {
                                     <Form.Group controlId="heartRate">
                                         <Form.Label>Frequencia Cardiaca</Form.Label>
                                         <Form.Control isValid={!(formik.touched.heartRate && Boolean(formik.errors.heartRate))} isInvalid={formik.touched.heartRate && Boolean(formik.errors.heartRate)} min={1} step={0.01} required {...formik.getFieldProps('heartRate')} type="number"/>
+                                        <Form.Control.Feedback type="valid" style={{color: CorFreqCard}}><small>{CatFreqCard}</small></Form.Control.Feedback>
                                         <Form.Control.Feedback type="invalid">{formik.errors.heartRate}</Form.Control.Feedback>
-                                        <Form.Control.Feedback type="valid" style={{color: CorFreqCard}}>{CatFreqCard}</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group controlId="respiratoryRate">
                                         <Form.Label>Frequencia Respiratoria</Form.Label>
                                         <Form.Control isValid={!(formik.touched.respiratoryRate && Boolean(formik.errors.respiratoryRate))} isInvalid={formik.touched.respiratoryRate && Boolean(formik.errors.respiratoryRate)} min={1} step={0.01} required {...formik.getFieldProps('respiratoryRate')} type="number"/>
-                                        <Form.Control.Feedback type="valid" style={{color: CorFreqResp}}>{CatFreqResp}</Form.Control.Feedback>
+                                        <Form.Control.Feedback type="valid" style={{color: CorFreqResp}}><small>{CatFreqResp}</small></Form.Control.Feedback>
                                         <Form.Control.Feedback type="invalid">{formik.errors.respiratoryRate}</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                             </Row>
                             <Row>
-                                <p onClick={debug}>Sintomas</p>
+                                <p>Sintomas</p>
                                 <div>
                                     {sintomasOpts.map((sintoma,index)=>(
                                         <Col key={`${sintoma}${index}`}>
@@ -331,8 +336,6 @@ export function Perfil () {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
-            <Button onClick={debug}>aa</Button>
         </>
     )
 }
