@@ -26,13 +26,9 @@ export const CreatePatient = Yup.object().shape({
         const FileName = value.name
 
         const isValid = permittedExtensions.some((extension)=> FileName.endsWith(extension))
-        console.log(isValid)
-
         return isValid
     }).test('FileSize', 'A Imagem é muito grande', (value)=>{
         const maxSize = 3 * 1024 * 1024 
-
-        console.log(value.size);
         
         return value.size <= maxSize
     })

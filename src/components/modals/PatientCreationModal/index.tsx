@@ -18,10 +18,11 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
             try{
                 const patientData = {
                     ...values,
-                    condition: 'Indefinido'
+                    condition: 'Indefinido',
+                    photo: formik.values.photo
                 }
                 
-                console.log(patientData)
+                console.log(patientData.photo)
                 
                 api.post('/patients', patientData)
 
@@ -36,7 +37,7 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
       });      
       
       function debug() {
-        console.log(formik.errors);
+        console.log(formik.values);
         
       }
 
@@ -79,10 +80,17 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="photo">
                             <Form.Label>Foto do paciente</Form.Label>
-                            <Form.Control required isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} type="file" name="photo"
+                            <Form.Control 
+                                required 
+                                isInvalid={formik.touched.photo && Boolean(formik.errors.photo)} 
+                                {...formik.getFieldProps('photo')}
+                                type="file" 
+                                value={undefined}
+                                name="photo"
                                 onChange={(event) => {
                                     const file = (event.currentTarget as HTMLInputElement).files?.[0]
                                     formik.setFieldValue('photo', file)
+                                    console.log(file)
                                 }}
                                 // não aparece da maneira que eu queria talvez pelo getInputFields 
                             />
@@ -97,6 +105,7 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
                     </Form>
                 </Modal.Body>
             </Modal>
+            <Button onClick={debug}>aa</Button>
         </>
     )
 }

@@ -17,6 +17,8 @@ export function ConsultItem ({consult}:ConsultItemProp) {
     if (consult.symptoms === '') {
         consult.symptoms = "Nenhum sintoma apresentado"
     }
+
+    // let symptomsArrayString = consult.symptoms.slice(2, consult.symptoms.length - 2)
     
     let symptomsArray = consult.symptoms.split(',')
 

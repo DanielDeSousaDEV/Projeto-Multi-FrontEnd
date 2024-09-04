@@ -3,5 +3,5 @@ export const PatientInitialValues = {
     cpf:"",
     birthDate:"",
     telephone:"",
-    photo:undefined,
+    photo: "",
 };
