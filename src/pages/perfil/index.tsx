@@ -9,6 +9,10 @@ import { defEstado } from "../../utils/defEstado";
 import { useFormik } from "formik";
 import { ConsultInitialValues } from "@/utils/InitialValues/ConsultInitialValue";
 import { consultRegistration } from "@/utils/validation/consultRegistration";
+import { defFreqCard } from "@/utils/defFreqCard";
+import { defCorFC } from "@/utils/defCorFC";
+import { defFreqResp } from "@/utils/defFreqResp";
+import { defCorFR } from "@/utils/defCorFR";
 
 export function Perfil () {
     
@@ -39,14 +43,14 @@ export function Perfil () {
     const {state} = useLocation()
     
     useEffect(()=>{
-        setPaciente(state)
-        
         if (!state) {
             console.log('dentro do if')
             PegarDadosPaciente()
+            closeLoadModal()
+        }else{
+            setPaciente(state)
+            closeLoadModal()  
         }
-
-        closeLoadModal()
     }, [])
     
     useEffect(() => {
@@ -191,9 +195,17 @@ export function Perfil () {
     // console.log(consultas)
 
     function debug() {
-        console.log(paciente)  
+        console.log(formik.getFieldProps('heartRate'))  
 
     }
+
+    const CatFreqCard = defFreqCard(formik.values.heartRate)
+
+    const CorFreqCard = defCorFC(CatFreqCard)
+    
+    const CatFreqResp = defFreqResp(formik.values.respiratoryRate)
+
+    const CorFreqResp = defCorFR(CatFreqResp)
     
     return (
         <>
@@ -240,14 +252,16 @@ export function Perfil () {
                                 <Col>
                                     <Form.Group controlId="heartRate">
                                         <Form.Label>Frequencia Cardiaca</Form.Label>
-                                        <Form.Control isInvalid={formik.touched.heartRate && Boolean(formik.errors.heartRate)} min={1} step={0.01} required {...formik.getFieldProps('heartRate')}/>
+                                        <Form.Control isValid={!(formik.touched.heartRate && Boolean(formik.errors.heartRate))} isInvalid={formik.touched.heartRate && Boolean(formik.errors.heartRate)} min={1} step={0.01} required {...formik.getFieldProps('heartRate')} type="number"/>
                                         <Form.Control.Feedback type="invalid">{formik.errors.heartRate}</Form.Control.Feedback>
+                                        <Form.Control.Feedback type="valid" style={{color: CorFreqCard}}>{CatFreqCard}</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group controlId="respiratoryRate">
                                         <Form.Label>Frequencia Respiratoria</Form.Label>
-                                        <Form.Control isInvalid={formik.touched.respiratoryRate && Boolean(formik.errors.respiratoryRate)} min={1} step={0.01} required {...formik.getFieldProps('respiratoryRate')}/>
+                                        <Form.Control isValid={!(formik.touched.respiratoryRate && Boolean(formik.errors.respiratoryRate))} isInvalid={formik.touched.respiratoryRate && Boolean(formik.errors.respiratoryRate)} min={1} step={0.01} required {...formik.getFieldProps('respiratoryRate')} type="number"/>
+                                        <Form.Control.Feedback type="valid" style={{color: CorFreqResp}}>{CatFreqResp}</Form.Control.Feedback>
                                         <Form.Control.Feedback type="invalid">{formik.errors.respiratoryRate}</Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
