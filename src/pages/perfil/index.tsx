@@ -11,25 +11,13 @@ import { ConsultInitialValues } from "@/utils/InitialValues/ConsultInitialValue"
 import { consultRegistration } from "@/utils/validation/consultRegistration";
 
 export function Perfil () {
-    let {state} = useLocation()
     
-    useEffect(()=>{
-        setPaciente(state)
-
-        if (!state) {
-            PegarDadosPaciente()
-            // vale ressaltar que tavez o back end mande as consultas
-            console.log(state)
-        }
-        console.log("nao possui os dados")
-    }, [])
-
     let { id } = useParams();
 
     let [consultas, setConsultas] = useState<Consult[]>([])
 
     let [paciente, setPaciente] = useState<Patient>({} as Patient)
-
+    
     let [ultEstConsulta, setUltEstConsulta] = useState<string>('')
 
     let [sucesso, setSucesso] = useState<boolean>()
@@ -44,10 +32,23 @@ export function Perfil () {
     let [loadModal, setLoadModal] = useState<boolean>(true)
 
     let closeLoadModal = () => {setLoadModal(false)}
-
+    
     useEffect(()=>{PegarTodasConsultas()}, [id, sucesso])
-    // useEffect(()=>{PegarDadosPaciente()}, [id]) não sei se permaneço com isso
+    // useEffect(()=>{PegarDadosPaciente()}, [id])
 
+    const {state} = useLocation()
+    
+    useEffect(()=>{
+        setPaciente(state)
+        
+        if (!state) {
+            console.log('dentro do if')
+            PegarDadosPaciente()
+        }
+
+        closeLoadModal()
+    }, [])
+    
     useEffect(() => {
         setUltEstConsulta('Indefinido')
         if (consultas.length > 0) {
@@ -60,7 +61,7 @@ export function Perfil () {
         initialValues: ConsultInitialValues,
         validationSchema: consultRegistration,
         onSubmit: ()=>{
-
+            
             const symptomsPercperception = defSintPerc(formik.values.symptoms)
             
             const consultCondition = defEstado(symptomsPercperception)//tenho que trocar o nome das funções
@@ -78,6 +79,14 @@ export function Perfil () {
             }
             
             api.post(`/consults`, consultData) 
+
+            const updateData = {
+                "condition": consultCondition
+            }
+
+            api.patch(`/patients/${id}`, updateData).catch((err)=>{
+                console.log(err)
+            })
             //a definicao de sintomas esta errada talvez não use mais
         }
     })
@@ -102,6 +111,8 @@ export function Perfil () {
             await api.get(`/patients/${id}/consults`).then((resp)=>{
                 setConsultas(resp.data)
                 console.log(resp)
+
+
             }).catch((error)=>{
 
                 console.error(error);
@@ -180,7 +191,7 @@ export function Perfil () {
     // console.log(consultas)
 
     function debug() {
-        console.log(consultas)  
+        console.log(paciente)  
 
     }
     

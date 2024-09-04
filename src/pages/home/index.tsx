@@ -104,7 +104,7 @@ export function Home() {
                             <Button className="py-2" onClick={openPacienteModal}>Adicionar novo paciente</Button>
                         </Row>
 
-                        {/* <PatientsDashboard Dados={pacientes}/> */}
+                        <PatientsDashboard data={pacientes}/>
 
                         {errorAlert && (
                             <Alert variant="warning" onClose={closeErrorAlert} dismissible>
@@ -170,51 +170,6 @@ export function Home() {
                     
                 </Row>
             </Container>
-
-
-            {/* <Modal show={pacienteModal} onHide={closePacienteModal} animation centered size="xl">
-                <Modal.Header closeButton>
-                <Modal.Title>Novo Paciente</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                    <Form onSubmit={AdicionarNovoPaciente}>
-                        <Form.Group className="mb-3" controlId="novoPacienteForm.NomeCompleto">
-                            <Form.Label>Nome Completo</Form.Label>
-                            <Form.Control required type="text" name="nome" placeholder="Digite seu nome" />
-                        </Form.Group>
-                        <Row>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="novoPacienteForm.DataNasc">
-                                    <Form.Label>Data de nascimento</Form.Label>
-                                    <Form.Control required type="date" name="dataNasc" max="9999-12-31" />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="novoPacienteForm.CPF">
-                                    <Form.Label>CPF</Form.Label>
-                                    <Form.Control required as={InputMask} name="cpf" mask="nnn.nnn.nnn-nn" replacement={{n:/[0-9]/}} type="text" placeholder="xxx.xxx.xxx-xx"/>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Form.Group className="mb-3" controlId="novoPacienteForm.Numero">
-                            <Form.Label>Número de telefone</Form.Label>
-                            <Form.Control required as={InputMask} name="telefone" mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} type="text" placeholder="(xx) xxxxx-xxxx"/>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="novoPacienteForm.Foto" >
-                            <Form.Label>Foto do paciente</Form.Label>
-                            <Form.Control required type="file" name="foto" />
-                        </Form.Group>
-
-                        <div className="justify-content-end d-flex gap-3">
-                            <Button variant="secondary" onClick={closePacienteModal}>Cancelar</Button>
-                            <Button variant="primary" type="submit">Salvar novo paciente</Button>
-                        </div>
-
-                    </Form>
-                </Modal.Body>
-            </Modal> */}
-
             
             <Modal show={errorModal} onHide={closeErrorModal}>
                 <Modal.Header closeButton>

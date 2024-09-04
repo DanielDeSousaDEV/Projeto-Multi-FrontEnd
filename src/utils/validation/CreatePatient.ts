@@ -10,7 +10,11 @@ export const CreatePatient = Yup.object().shape({
     }).test('CPFValid', 'O CPF possui um valor invalido', (value)=>{
         return cpfValidator(value)
     }),
-    birthDate: Yup.date().required('O Data de Nascimeneto é obrigatória'), //validação de dia apos hoje
+    birthDate: Yup.date().required('O Data de Nascimento é obrigatória').test('InvalidDate', 'Data invalida', (value)=>{
+        const currentDate = new Date()
+
+        return value < currentDate 
+    }), //validação de dia apos hoje
     telephone: Yup.string().required('O Telefone é obrigatório').test('InvalidFormat', 'O formato do Telefone é invalido', (value)=>{
         const telephoneRegExp = /[\(][\d]{2}[\)][\d]{4}[-][\d]{4}/
 
@@ -29,7 +33,7 @@ export const CreatePatient = Yup.object().shape({
         return isValid
     }).test('FileSize', 'A Imagem é muito grande', (value)=>{
         const maxSize = 3 * 1024 * 1024 
-        
+
         return value.size <= maxSize
     })
 })

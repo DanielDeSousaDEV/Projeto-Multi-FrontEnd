@@ -1,11 +1,10 @@
 import { Col, Container, Row } from "react-bootstrap";
-import { patientRowProps } from "./PatientRow";
 
 interface PatientsDashboardProps {
-    Dados:patientRowProps[]
+    data:Patient[]
 }
 
-export function PatientsDashboard({Dados}:PatientsDashboardProps) {
+export function PatientsDashboard({data}:PatientsDashboardProps) {
         var EstadosPerc:Array<number> = []
 
         let PossiveisEstados = [
@@ -18,9 +17,9 @@ export function PatientsDashboard({Dados}:PatientsDashboardProps) {
         
         PossiveisEstados.map((Estado)=>{            
             EstadosPerc.push(
-                Dados.filter((Paciente)=>{
-                    return Paciente.condicao === Estado
-                }).length/Dados.length
+                data.filter((Paciente)=>{
+                    return Paciente.condition === Estado
+                }).length/data.length
             )
         })
 
@@ -31,6 +30,7 @@ export function PatientsDashboard({Dados}:PatientsDashboardProps) {
         if (EstadosPerc.includes(NaN)) {
             EstadosPerc.fill(0)
         }
+        
     return(
         <Row className="rounded justify-content-center py-2 mb-3" style={{backgroundColor:"var(--tertiary)"}}>
             
