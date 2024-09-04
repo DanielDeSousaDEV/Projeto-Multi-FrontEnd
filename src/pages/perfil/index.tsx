@@ -44,7 +44,6 @@ export function Perfil () {
     
     useEffect(()=>{
         if (!state) {
-            console.log('dentro do if')
             PegarDadosPaciente()
             closeLoadModal()
         }else{
@@ -74,7 +73,6 @@ export function Perfil () {
 
             if (formik.values.symptoms.toString()) {
                 symptomsString = formik.values.symptoms.toString()
-                console.log('a')
             }
 
             const {heartRate, respiratoryRate} = formik.values
@@ -90,10 +88,14 @@ export function Perfil () {
             api.post(`/consults`, consultData) 
 
             const updateData = {
-                "condition": consultCondition
+                condition: consultCondition
             }
 
-            api.patch(`/patients/${id}`, updateData).catch((err)=>{
+            api.patch(`/patients/${id}`, updateData, {
+                headers:{
+                    "Content-Type":'application/json'
+                }
+            }).catch((err)=>{
                 console.log(err)
             })
             //a definicao de sintomas esta errada talvez não use mais

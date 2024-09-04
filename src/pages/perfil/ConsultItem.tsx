@@ -14,17 +14,15 @@ export interface ConsultItemProp {
 
 export function ConsultItem ({consult}:ConsultItemProp) {
 
-    if (consult.symptoms === '') {
-        consult.symptoms = "Nenhum sintoma apresentado"
+    if (!consult.symptoms) {
+        consult.symptoms = ''
     }
 
     // let symptomsArrayString = consult.symptoms.slice(2, consult.symptoms.length - 2)
 
-    let symptomsArray = ["Nenhum Sintoma Apresentado"]
+    let symptomsArray = consult.symptoms.split(',')
 
-    if (consult.symptoms) {
-        symptomsArray = consult.symptoms.split(',')
-    }
+    console.log(symptomsArray) //olha o metodo
 
     //Definição da porcentagem de possbilidade de infecção
     let consultaPerc = defSintPerc(symptomsArray);
@@ -60,7 +58,7 @@ export function ConsultItem ({consult}:ConsultItemProp) {
                     <h5>Relatorio do diagnostico</h5>
                     <strong>O paciente apresentou os seguintes sintomas: </strong>
                     <div className="d-flex flex-wrap gap-3">
-                        {symptomsArray.map((symptom,index)=>(
+                        {symptomsArray?.map((symptom,index)=>(
                             <div key={index} className="p-2 rounded" style={{backgroundColor:"var(--tertiary)"}}>{symptom}</div>
                         ))}
                     </div>
