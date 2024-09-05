@@ -14,15 +14,15 @@ export interface ConsultItemProp {
 
 export function ConsultItem ({consult}:ConsultItemProp) {
 
-    if (!consult.symptoms) {
-        consult.symptoms = ''
+    let symptomsArray:string[]
+
+    symptomsArray = ['Nenhum Sintoma Informado']
+
+    if (consult.symptoms) {
+        symptomsArray = consult.symptoms.split(',')
     }
 
     // let symptomsArrayString = consult.symptoms.slice(2, consult.symptoms.length - 2)
-
-    let symptomsArray = consult.symptoms.split(',')
-
-    console.log(symptomsArray) //olha o metodo
 
     //Definição da porcentagem de possbilidade de infecção
     let consultaPerc = defSintPerc(symptomsArray);

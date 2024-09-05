@@ -13,6 +13,7 @@ import { defFreqCard } from "@/utils/defFreqCard";
 import { defCorFC } from "@/utils/defCorFC";
 import { defFreqResp } from "@/utils/defFreqResp";
 import { defCorFR } from "@/utils/defCorFR";
+import { AxiosResponse } from "axios";
 
 export function Perfil () {
     
@@ -64,7 +65,8 @@ export function Perfil () {
         initialValues: ConsultInitialValues,
         validationSchema: consultRegistration,
         onSubmit: ()=>{
-            
+            setSucesso(false)
+
             const symptomsPercperception = defSintPerc(formik.values.symptoms)
             
             const consultCondition = defEstado(symptomsPercperception)//tenho que trocar o nome das funções
@@ -85,19 +87,28 @@ export function Perfil () {
                 respiratoryRate: respiratoryRate
             }
             
-            api.post(`/consults`, consultData) 
+            api.post(`/consults`, consultData).then((data)=>{
+                console.log(data)
+            })
 
             const updateData = {
                 condition: consultCondition
             }
-
-            api.patch(`/patients/${id}`, updateData, {
-                headers:{
-                    "Content-Type":'application/json'
-                }
-            }).catch((err)=>{
+            try{
+                api.patch(`/patients/${id}`, updateData, {
+                    headers:{
+                        "Content-Type":'application/json'
+                    }
+                }).then((resp:AxiosResponse<Consult>)=>{
+                    const newConsult = resp.data
+                    let actualConsults = consultas
+                    actualConsults.push(newConsult)
+                    setConsultas(actualConsults)
+                    // setSucesso(true)
+                })
+            }catch(err){
                 console.log(err)
-            })
+            }
             //a definicao de sintomas esta errada talvez não use mais
         }
     })
@@ -202,7 +213,7 @@ export function Perfil () {
     // console.log(consultas)
 
     function debug() {
-        console.log(formik.getFieldProps('heartRate'))  
+        console.log(consultas)  
 
     }
 
@@ -216,6 +227,7 @@ export function Perfil () {
     
     return (
         <>
+        <Button onClick={debug}>aa</Button>
             {paciente && (
                 <Container fluid className="md px-5 col-12 my-3">
                     <Row className="p-3 rounded mb-3" style={{backgroundColor:"var(--quaternary)"}}>
@@ -301,8 +313,8 @@ export function Perfil () {
                         <div className="d-flex flex-column justify-content-around">
                             {consultas.length > 0 ? (
                                 <Accordion>
-                                    {consultas.map((consulta)=>(
-                                        <ConsultItem key={consulta.id} consult={consulta}/>
+                                    {consultas.map((consulta, index)=>(
+                                        <ConsultItem key={index.toString() + consulta.id.toString()} consult={consulta}/>
                                     ))}
                                 </Accordion>
                             ):(
