@@ -101,17 +101,17 @@ export function Perfil () {
                     }
                 }).then((resp:AxiosResponse<Consult>)=>{
                     const newConsult = resp.data
-                    let actualConsults = consultas
-                    actualConsults.push(newConsult)
-                    setConsultas(actualConsults)
-                    // setSucesso(true)
+                    AddConsult(newConsult)
                 })
             }catch(err){
                 console.log(err)
             }
-            //a definicao de sintomas esta errada talvez não use mais
         }
     })
+
+    function AddConsult (consult:Consult) {
+        setConsultas([...consultas, consult])
+    }
 
     async function PegarDadosPaciente():Promise<void> {
         try {
@@ -314,7 +314,7 @@ export function Perfil () {
                             {consultas.length > 0 ? (
                                 <Accordion>
                                     {consultas.map((consulta, index)=>(
-                                        <ConsultItem key={index.toString() + consulta.id.toString()} consult={consulta}/>
+                                        <ConsultItem key={consulta.id.toString()} consult={consulta}/>
                                     ))}
                                 </Accordion>
                             ):(

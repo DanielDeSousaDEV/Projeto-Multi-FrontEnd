@@ -8,43 +8,48 @@ import { api } from "@/api/config";
 
 type PatientCreationModalProps = {
     handleClose: ()=>void,
+    handleAddPatient: (patient:Patient)=>void
 } & ModalProps
 
-export function PatientCreationModal ({handleClose, handleShow, ...rest}:PatientCreationModalProps) {
+export function PatientCreationModal ({handleClose, handleAddPatient, ...rest}:PatientCreationModalProps) {
     const formik = useFormik({
         initialValues: PatientInitialValues,
         validationSchema: CreatePatient,
         onSubmit: (values) => {
-            try{
-                const patientData = {
-                    ...values,
-                    condition: 'Indefinido',
-                    photo: formik.values.photo
-                }
-                
-                console.log(patientData.photo)
-                
-                api.post('/patients', patientData)
-
-                handleClose()
-                
-                //tá dando erro porque o backend tá esperando os nomes em portugues
-
-            }catch(error){
-                console.log(error)
+            const patientData = {
+                ...values,
+                condition: 'Indefinido',
+                photo: formik.values.photo
             }
+            
+            console.log(patientData.photo)
+            
+            api.post('/patients', patientData).then((resp)=>{
+                handleClose()
+                const newPatient = resp.data
+                handleAddPatient(newPatient)
+            }).catch((error:any)=>{
+                const erros = error.response.data.errors
+                formik.setErrors({
+                    birthDate: erros.birthDate,
+                    name: erros.name,
+                    photo: erros.photo,
+                    telephone: erros.telephone,
+                    cpf: erros.cpf
+                })
+            })
         }
       });      
       
       function debug() {
-        console.log(formik.values);
+        console.log(formik.errors);
         
       }
 
     return(
         <>
             <Modal {...rest} onHide={handleClose}>
-                <Modal.Header closeButton autoFocus>
+                <Modal.Header closeButton autoFocus onClick={debug}>
                 <Modal.Title>Novo Paciente</Modal.Title>
                 </Modal.Header>
 
@@ -74,7 +79,6 @@ export function PatientCreationModal ({handleClose, handleShow, ...rest}:Patient
                         </Row>
                         <Form.Group className="mb-3" controlId="telephone">
                             <Form.Label>Número de telefone</Form.Label>
-                            {/* <Form.Control required as={InputMask} name="telephone" mask="(nn)nnnnn-nnnn" replacement={{n:/[0-9]/}} type="text" placeholder="(xx) xxxxx-xxxx"/> */}
                             <Form.Control required isInvalid={formik.touched.telephone && Boolean(formik.errors.telephone)} {...formik.getFieldProps('telephone')} as={InputMask} mask="(nn)nnnn-nnnn" replacement={{n:/[0-9]/}} placeholder="(xx)xxxxx-xxxx"/>
                             <Form.Control.Feedback type="invalid">{formik.errors.telephone}</Form.Control.Feedback>
                         </Form.Group>

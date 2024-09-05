@@ -40,10 +40,11 @@ export function ConsultItem ({consult}:ConsultItemProp) {
     let corFreqCard = defCorFC(estadoFC)
 
     //definição do estado da frequencia repiratoria
-    let estadoFR = defFreqResp(consult.respiratoryRate)
+    let estadoFR = defFreqResp(consult.respiratoryRate) 
 
     //definição da cor do texto da frequencia repiratoria
     let corFreqResp = defCorFR(estadoFR)
+    console.log(consult.id)
     
     return(
         <Accordion.Item eventKey={consult.id.toString()}>

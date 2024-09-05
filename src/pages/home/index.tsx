@@ -38,9 +38,6 @@ export function Home() {
 
     const closePacienteModal = () => {setPacienteModal(false)}
     const openPacienteModal = () => {setPacienteModal(true)}
-
-
-    
     
     async function PegarTodosPacientes():Promise<void> {
         api.get('/patients').then((resp)=>{
@@ -91,7 +88,10 @@ export function Home() {
         console.log('debug')
         console.log(pacientes[0])
     }
-    
+
+    function AddPatient (patient:Patient) {
+        setPacientes([patient, ...pacientes])
+    }
 
     return(
         <>
@@ -195,7 +195,7 @@ export function Home() {
                 </Modal.Footer>
             </Modal>
             
-            <PatientCreationModal animation centered size="xl" show={pacienteModal} handleClose={closePacienteModal} />
+            <PatientCreationModal handleAddPatient={AddPatient} animation centered size="xl" show={pacienteModal} handleClose={closePacienteModal} />
 
         </>
     )
