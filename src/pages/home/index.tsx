@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
+
+import Alert from "react-bootstrap/Alert";
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Modal from 'react-bootstrap/Modal'
+import Row from 'react-bootstrap/Row'
+import Table from 'react-bootstrap/Table'
+import Swal from 'sweetalert2'
+
 import { api } from "@/api/config";
 import { PatientRow } from "./PatientRow";
 import { PatientsDashboard } from "./PatientsDashboard";
-import Swal from 'sweetalert2'
 
 import { PatientCreationModal } from "@components/modals/PatientCreationModal/index.js";
 
@@ -83,11 +91,6 @@ export function Home() {
 
     function Recarregar() {
         location.reload()
-    }
-
-    function debug() {
-        console.log('debug')
-        console.log(pacientes[0])
     }
 
     function AddPatient (patient:Patient) {

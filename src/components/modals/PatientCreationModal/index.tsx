@@ -1,6 +1,13 @@
+import { ModalProps } from "react-bootstrap"
 import { InputMask } from "@react-input/mask"
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Modal from 'react-bootstrap/Modal'
+import Row from 'react-bootstrap/Row'
+
 import { useFormik } from "formik";
-import { Button, Col, Form, Modal, ModalProps, Row } from "react-bootstrap"
+
 import { PatientInitialValues } from "@utils/InitialValues/PatientInitialValues";
 import { CreatePatient } from "@utils/validation/CreatePatient"
 import { api } from "@/api/config";

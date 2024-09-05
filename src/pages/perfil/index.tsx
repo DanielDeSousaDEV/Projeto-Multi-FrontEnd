@@ -1,20 +1,37 @@
 import { useEffect, useState } from "react";
-import { Accordion, Alert, Badge, Button, Col, Container, Form, FormCheck, Image, Modal, Row, Stack } from "react-bootstrap";
+
+import Accordion from "react-bootstrap/Accordion";
+import Alert from 'react-bootstrap/Alert'
+import Badge from 'react-bootstrap/Badge'
+import Button from 'react-bootstrap/Button'
+import Stack from 'react-bootstrap/Stack'
+import Row from 'react-bootstrap/Row'
+import Modal from 'react-bootstrap/Modal'
+import Image from 'react-bootstrap/Image'
+import FormCheck from 'react-bootstrap/FormCheck'
+import Form from 'react-bootstrap/Form'
+import Container from 'react-bootstrap/Container'
+import Col from 'react-bootstrap/Col'
+import Swal from "sweetalert2";
+
 import { useLocation, useParams } from "react-router-dom"
-import { api } from "../../api/config";
-import { ConsultItem } from "./ConsultItem";
-import { sintomasOpts } from "../../data/sintomasOpts"
-import { defSintPerc } from "../../utils/defSintPerc";
-import { defEstado } from "../../utils/defEstado";
 import { useFormik } from "formik";
-import { ConsultInitialValues } from "@/utils/InitialValues/ConsultInitialValue";
-import { consultRegistration } from "@/utils/validation/consultRegistration";
+
+import { api } from "../../api/config";
+
+import { defSintPerc } from "@utils/defSintPerc";
+import { defEstado } from "@utils/defEstado";
 import { defFreqCard } from "@/utils/defFreqCard";
 import { defCorFC } from "@/utils/defCorFC";
 import { defFreqResp } from "@/utils/defFreqResp";
 import { defCorFR } from "@/utils/defCorFR";
+
+import { ConsultItem } from "./ConsultItem";
+import { sintomasOpts } from "../../data/sintomasOpts"
+
+import { consultRegistration } from "@/utils/validation/consultRegistration";
+import { ConsultInitialValues } from "@/utils/InitialValues/ConsultInitialValue";
 import { AxiosResponse } from "axios";
-import Swal from "sweetalert2";
 
 export function Perfil () {
     
@@ -154,22 +171,6 @@ export function Perfil () {
             console.error('ERRO:' + err);
             
         }
-    }
-    
-
-    async function AtualizarCondicao(condicao:string) {
-        //fazer o json
-        let PacienteCodicaoJSON = {
-            "condicao":condicao
-        }
-
-        console.error(PacienteCodicaoJSON);
-        
-
-        await api.patch(`/pacientes/${id}`, PacienteCodicaoJSON).catch((error)=>{
-            setError(error.message)
-            openErroModal()
-        })
     }
 
     function Recarregar() {

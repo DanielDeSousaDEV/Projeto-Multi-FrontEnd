@@ -1,5 +1,5 @@
 import { FaArrowCircleRight } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { defCorEstado } from "@utils/defCorEstado";
 
@@ -19,11 +19,7 @@ export function PatientRow(patient:Patient) {
 
     let idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
 
-    
-    
     // let corEstado = defCorEstado(patient.condicao)
-
-    //concertar as cores dos estados dps
     
     return(
         <tr>
