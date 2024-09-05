@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
 import { api } from "@/api/config";
-import { patientRowProps, PatientRow } from "./PatientRow";
+import { PatientRow } from "./PatientRow";
 import { PatientsDashboard } from "./PatientsDashboard";
+import Swal from 'sweetalert2'
 
 import { PatientCreationModal } from "@components/modals/PatientCreationModal/index.js";
 
@@ -91,6 +92,11 @@ export function Home() {
 
     function AddPatient (patient:Patient) {
         setPacientes([patient, ...pacientes])
+        Swal.fire({
+            title: 'Paciente cadastrado com sucesso',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
     }
 
     return(

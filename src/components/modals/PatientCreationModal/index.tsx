@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import { Button, Col, Form, Modal, ModalProps, Row } from "react-bootstrap"
 import { PatientInitialValues } from "@utils/InitialValues/PatientInitialValues";
 import { CreatePatient } from "@utils/validation/CreatePatient"
-// import { CreatePatient } from "../../../utils/validation/CreatePatient";
 import { api } from "@/api/config";
 
 type PatientCreationModalProps = {

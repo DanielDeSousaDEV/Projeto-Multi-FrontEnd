@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Accordion, Alert, Badge, Button, Col, Container, Form, FormCheck, Image, Modal, Row, Stack } from "react-bootstrap";
 import { useLocation, useParams } from "react-router-dom"
 import { api } from "../../api/config";
@@ -14,6 +14,7 @@ import { defCorFC } from "@/utils/defCorFC";
 import { defFreqResp } from "@/utils/defFreqResp";
 import { defCorFR } from "@/utils/defCorFR";
 import { AxiosResponse } from "axios";
+import Swal from "sweetalert2";
 
 export function Perfil () {
     
@@ -111,6 +112,11 @@ export function Perfil () {
 
     function AddConsult (consult:Consult) {
         setConsultas([...consultas, consult])
+        Swal.fire({
+            title: 'Consulta cadastrada com sucesso',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
     }
 
     async function PegarDadosPaciente():Promise<void> {
@@ -150,43 +156,6 @@ export function Perfil () {
         }
     }
     
-    // async function AdicionarNovaConsulta (e:FormEvent<HTMLFormElement>) {
-    //     e.preventDefault()
-
-    //     setSucesso(false)
-        
-    //     let myForm = e.currentTarget
-    //     let myformdata = new FormData(myForm)
-        
-    //     //Definição do JSON dos sintomas
-    //     let sintomasInformados = myformdata.getAll('sintomas')
-    //     let sintomasJSON:{sintomas:string[]} = {
-    //         sintomas:[]
-    //     };
-    //     for (let index = 0; index < sintomasInformados.length; index++) {
-    //         sintomasJSON.sintomas.push(sintomasInformados[index].toString())            
-    //     }
-        
-    //     myformdata.set('sintomas', JSON.stringify(sintomasJSON))
-        
-    //     //definição do usuario da consulta
-    //     myformdata.append('paciente_id',id!.toString())
-        
-    //     let consultaPerc = defSintPerc(sintomasJSON)
-        
-    //     let consultaEst = defEstado(consultaPerc)
-        
-    //     myformdata.append('estado', consultaEst)
-        
-    //     await api.post('/consultas', myformdata).then(()=>{
-    //         setSucesso(true)
-
-    //         AtualizarCondicao(consultaEst)
-    //     }).catch((error)=>{
-    //         setError(error.message)
-    //         openErroModal()
-    //     })
-    // }
 
     async function AtualizarCondicao(condicao:string) {
         //fazer o json
@@ -210,13 +179,6 @@ export function Perfil () {
     let dataDeNascNFormat = new Date (paciente?.birthDate!)
     let dataNascFormatada = dataDeNascNFormat.toLocaleDateString('pt-br')
 
-    // console.log(consultas)
-
-    function debug() {
-        console.log(consultas)  
-
-    }
-
     const CatFreqCard = defFreqCard(formik.values.heartRate)
 
     const CorFreqCard = defCorFC(CatFreqCard)
@@ -227,7 +189,6 @@ export function Perfil () {
     
     return (
         <>
-        <Button onClick={debug}>aa</Button>
             {paciente && (
                 <Container fluid className="md px-5 col-12 my-3">
                     <Row className="p-3 rounded mb-3" style={{backgroundColor:"var(--quaternary)"}}>
@@ -313,7 +274,7 @@ export function Perfil () {
                         <div className="d-flex flex-column justify-content-around">
                             {consultas.length > 0 ? (
                                 <Accordion>
-                                    {consultas.map((consulta, index)=>(
+                                    {consultas.map((consulta)=>(
                                         <ConsultItem key={consulta.id.toString()} consult={consulta}/>
                                     ))}
                                 </Accordion>
