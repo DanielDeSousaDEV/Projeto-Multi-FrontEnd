@@ -69,7 +69,7 @@ export function PatientsDashboard({data}:PatientsDashboardProps) {
                     callbacks: {
                         label: function (context) {
                             let value = Number(context.raw) || 0;
-                            return `${(value/100).toFixed(2)}%`;
+                            return `${(value)}%`;
                         },
                     },
                 }
