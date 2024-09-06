@@ -1,6 +1,11 @@
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Container from 'react-bootstrap/Container'
+import { Pie } from 'react-chartjs-2'
+import { ChartData, ArcElement, PieController, ChartOptions } from 'chart.js'
+import { Chart } from 'chart.js/auto'
+
+
 interface PatientsDashboardProps {
     data:Patient[]
 }
@@ -31,7 +36,49 @@ export function PatientsDashboard({data}:PatientsDashboardProps) {
         if (EstadosPerc.includes(NaN)) {
             EstadosPerc.fill(0)
         }
+
+        console.log(EstadosPerc)
+
         
+        let PieChartData:ChartData<'pie', number[], unknown> = {
+            labels:PossiveisEstados,
+            datasets:[
+                {
+                    label: '',
+                    data: EstadosPerc,
+                    
+                }
+            ]
+        }    
+
+        let PieChartOptions:ChartOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right'
+                },
+                title: {
+                    display: true,
+                    text: 'Porcentagem dos pacientes por estados',
+                    color:'white',
+                    position: 'top',
+                    fullSize: true
+
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            let value = Number(context.raw) || 0;
+                            return `${(value/100).toFixed(2)}%`;
+                        },
+                    },
+                }
+            },
+        }
+
+        Chart.register(ArcElement, PieController)
+
+
     return(
         <Row className="rounded justify-content-center py-2 mb-3" style={{backgroundColor:"var(--tertiary)"}}>
             
@@ -62,6 +109,9 @@ export function PatientsDashboard({data}:PatientsDashboardProps) {
                         <span>{EstadosPerc[3]}%</span>
                     </Col>
                 </Row>
+                <div className="gap-1 d-flex" style={{width: '100%', textAlign: 'center', alignItems: 'center', alignContent: 'center'}}>
+                    <Pie style={{margin: 'auto'}} data={PieChartData} options={PieChartOptions}/>
+                </div>
             </Row>
 
         </Row>
