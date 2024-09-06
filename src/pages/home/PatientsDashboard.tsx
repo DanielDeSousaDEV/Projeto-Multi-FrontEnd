@@ -21,7 +21,7 @@ export function PatientsDashboard({data}:PatientsDashboardProps) {
         ]
         
         
-        PossiveisEstados.map((Estado)=>{            
+        PossiveisEstados.map((Estado)=>{
             EstadosPerc.push(
                 data.filter((Paciente)=>{
                     return Paciente.condition === Estado

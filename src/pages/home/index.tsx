@@ -29,15 +29,7 @@ export function Home() {
     
     let openErrorModal = () => {setErrorModal(true)}
     let closeErrorModal = () => {setErrorModal(false)}
-
-    let [errorAlert, setErrorAlert] = useState<boolean>(false)
     
-    let openErrorAlert = () => {setErrorAlert(true)}
-    let closeErrorAlert = () => {
-        setErrorAlert(false)
-        setError(false)
-    }
-
     let [loadModal, setLoadModal] = useState<boolean>(true)
 
     let closeLoadModal = () => {setLoadModal(false)}
@@ -115,28 +107,6 @@ export function Home() {
                         </Row>
 
                         <PatientsDashboard data={pacientes}/>
-
-                        {errorAlert && (
-                            <Alert variant="warning" onClose={closeErrorAlert} dismissible>
-                                <ul className="text-start">
-                                    {Object.keys(error).map((campo, index) => (
-                                        <li key={index}>{campo}
-                                            <ul>
-                                                {error[campo].map((messagem:string, index:number)=>(
-                                                    <li key={index}>{messagem}</li>
-                                                ))}
-                                            </ul>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </Alert>
-                        )}
-
-                        {sucesso && (
-                            <Alert variant="success">
-                                Paciente cadastrado com sucesso
-                            </Alert>
-                        )} 
 
                     </Col>
 
