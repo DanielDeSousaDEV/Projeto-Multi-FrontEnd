@@ -19,13 +19,13 @@ export function PatientRow(patient:Patient) {
 
     let idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
 
-    // let corEstado = defCorEstado(patient.condicao)
+    let corEstado = defCorEstado(patient.condition)
     
     return(
         <tr>
             <td>{patient.id}</td>
             <td>{patient.name}</td>
-            <td >{patient.condition}</td> {/*style={{color:corEstado}}*/}
+            <td style={{color:corEstado}}>{patient.condition}</td> {/**/}
             <td>{patient.cpf}</td>
             <td>{idade}</td>
             <td>
