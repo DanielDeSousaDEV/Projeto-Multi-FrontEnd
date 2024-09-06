@@ -2,7 +2,6 @@ import * as Yup from 'yup'
 import { cpfValidator } from '@/utils/functions/cpfValidator'
 
 export const CreatePatient = Yup.object().shape({
-    name: Yup.string().required('O Nome é obrigatório'),
     cpf: Yup.string().required('O CPF é obrigatório').test('InvalidFormat', 'O Formato do CPF é invalido', (value)=>{
         const cpfRegExp = /[\d]{3}[.][\d]{3}[.][\d]{3}[-][\d]{2}/
 

@@ -37,25 +37,20 @@ export function PatientCreationModal ({handleClose, handleAddPatient, ...rest}:P
             }).catch((error:any)=>{
                 const erros = error.response.data.errors
                 formik.setErrors({
-                    birthDate: erros.birthDate,
-                    name: erros.name,
-                    photo: erros.photo,
-                    telephone: erros.telephone,
-                    cpf: erros.cpf
+                    birthDate: erros.birthDate ? erros.birthDate.toString() : null,
+                    name: erros.name ? erros.name.toString() : null,
+                    photo: erros.photo ? erros.photo.toString() : null,
+                    telephone: erros.telephone ? erros.telephone.toString() : null,
+                    cpf: erros.cpf ? erros.cpf.toString() : null
                 })
             })
         }
-      });      
-      
-      function debug() {
-        console.log(formik.errors);
-        
-      }
+      });
 
     return(
         <>
             <Modal {...rest} onHide={handleClose}>
-                <Modal.Header closeButton autoFocus onClick={debug}>
+                <Modal.Header closeButton autoFocus>
                 <Modal.Title>Novo Paciente</Modal.Title>
                 </Modal.Header>
 
@@ -102,13 +97,12 @@ export function PatientCreationModal ({handleClose, handleAddPatient, ...rest}:P
                                     formik.setFieldValue('photo', file)
                                     console.log(file)
                                 }}
-                                // não aparece da maneira que eu queria talvez pelo getInputFields 
                             />
                             <Form.Control.Feedback type="invalid">{formik.errors.photo}</Form.Control.Feedback>
                         </Form.Group>
 
                         <div className="justify-content-end d-flex gap-3">
-                            <Button variant="secondary" onClick={debug}>Cancelar</Button>
+                            <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
                             <Button variant="primary" type="submit">Salvar novo paciente</Button>
                         </div>
 
