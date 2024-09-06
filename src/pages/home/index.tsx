@@ -52,35 +52,6 @@ export function Home() {
         })
     }
 
-    // async function AdicionarNovoPaciente (e:React.FormEvent<HTMLFormElement>) {
-    //     e.preventDefault()
-
-    //     setSucesso(false)
-        
-    //     closeErrorAlert()
-        
-    //     let myForm = e.currentTarget
-        
-    //     let myformdata = new FormData(myForm)
-        
-    //     myformdata.append('condicao','Indefinido')
-        
-    //     await api.post('/pacientes',myformdata).then(()=>{
-    //         setSucesso(true)
-    //     }).catch((erros)=>{
-    //         setError(false)
-    //         if(erros.response?.status === 422){
-    //             console.error(erros)
-    //             setError(erros.response.data.errors)
-    //             openErrorAlert()
-    //             return
-    //         }
-    //         setError(erros.message)
-    //         openErrorModal()
-    //     })
-    //     closePacienteModal()
-    // }
-
     function Recarregar() {
         location.reload()
     }
